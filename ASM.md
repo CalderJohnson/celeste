@@ -12,7 +12,7 @@ In conjunction with a label referencing it, this will create a value you can use
 
 Dereference a value with *:
 `mov ax, *5`
-This will use the address of that number rather than the value itself.
+This will use the value at that address number rather than the number itself.
 
 Define an instruction with:
 `<opcode> <args>`
