@@ -105,7 +105,7 @@ For binary mathemetical/logical instructions:
 For unary mathemetical/logical instructions:
     [1 byte opcode][0000][4 bits destination register][0000000000000000]
     [1 byte opcode][0001][4 bits destination register (dereferenced)][0000000000000000]
-    [1 byte opcode][0002][0000][2 bytes addr]
+    [1 byte opcode][0010][0000][2 bytes addr]
 
 
 For IO:
