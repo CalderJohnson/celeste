@@ -31,9 +31,9 @@ static bool find_labels(int* program, const unsigned int length) {
 static bool compile_line(const uint32_t* line, uint32_t* instruction) {
     *instruction = 0; //clear garbage value
 
+    //line length
     unsigned int length;
-    for (length = 0; line[length] != T_NL; length++) {}
-    length++;
+    for (length = 0; line[length] != T_NL; length++) {} length++;
 
     //operation tokens are the value of their opcode
     #define ENCODE_OP(opcode) *instruction |= opcode << 0x18
@@ -241,10 +241,6 @@ static bool compile_line(const uint32_t* line, uint32_t* instruction) {
                     *instruction |= line[4];          //addr
                 }
                 break;
-            case T_JMP:
-                ENCODE_OP(line[0]);
-                JMP_OP;
-                break;
             case T_CMP:
                 ENCODE_OP(line[0]);
                 if (length >= 8 && line[1] == T_SPACE && line[2] == T_REG && line[3] < 16 &&
@@ -266,6 +262,10 @@ static bool compile_line(const uint32_t* line, uint32_t* instruction) {
                     *instruction |= line[7];          //immv
                 }
                 else return false;
+                break;
+            case T_JMP:
+                ENCODE_OP(line[0]);
+                JMP_OP;
                 break;
             case T_JZ:
                 ENCODE_OP(line[0]);
