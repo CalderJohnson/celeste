@@ -71,6 +71,9 @@ static bool keyword_map (const char* keyword) {
     return true;
 }
 
+/* label tokenizing */
+static unsigned int label_count;
+
 /* tokenize the asm file */
 bool tokenize(const char* buffer) {
     char tempbuffer[10];

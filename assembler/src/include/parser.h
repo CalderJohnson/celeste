@@ -1,5 +1,5 @@
-#ifndef SCANNER_H
-#define SCANNER_H
+#ifndef PARSER_H
+#define PARSER_H
 
 #include <stdio.h>
 #include <lexer.h>

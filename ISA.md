@@ -3,6 +3,7 @@ __Celeste's memory is structured in the following manner__
 Addresses 0x0      (12288) -> 0xFEFF (65279) - Available for user code
 Addresses 0x0xFF00 (65280) -> 0xFFFF (65536) - Device register addresses
 
+
 __Celeste supports the following instructions__
 
 Misc:
@@ -51,6 +52,7 @@ ROR  -  rotate right
 IO:
 IN   -  IO word in
 OUT  -  IO word out
+
 
 __Instructions are encoded in the following format__
 

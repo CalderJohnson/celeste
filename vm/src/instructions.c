@@ -614,14 +614,14 @@ static void op_ror (const uint8_t spec, const uint32_t instruction) {
 }
 
 /* IO IN operation */
-static void op_in (uint8_t spec, uint32_t instruction) {
+static void op_in (uint32_t instruction) {
     uint8_t port = (instruction >> 0x8) & 0xFF;
     uint8_t reg = (instruction >> 0x10) & 0xF;
     registers[reg] = memory[DEVICE_OFFSET + port];
 }
 
 /* IO OUT operation */
-static void op_out (uint8_t spec, uint32_t instruction) {
+static void op_out (uint32_t instruction) {
     uint8_t port = (instruction >> 0x8) & 0xFF;
     uint8_t reg = (instruction >> 0x10) & 0xF;
     memory[DEVICE_OFFSET + port] = registers[reg];
@@ -740,10 +740,10 @@ static void step () {
             op_ror(spec, instruction);
             break;
         case OP_IN:
-            op_in(spec, instruction);
+            op_in(instruction);
             break;
         case OP_OUT:
-        	op_out(spec, instruction);
+        	op_out(instruction);
             break;
         default:
             call_trap(TRAP_INVOP);

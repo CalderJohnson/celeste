@@ -1,6 +1,6 @@
 __Celeste comes equipped with a dedicated, simple assembly language for ease of writing programs__
 
-Syntax is as follows: (only lowercase letters work)
+Syntax is as follows: (only lowercase letters work, no extra whitespace)
 
 Define a label with:
 `label:`
