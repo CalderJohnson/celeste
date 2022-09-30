@@ -7,7 +7,6 @@
 
 /* label resolving */
 static unsigned int labels[50];
-static unsigned int label_index = 0;
 
 static bool find_labels(int* program, const unsigned int length) {
     unsigned int current_addr = 0; //keep track of current address
@@ -20,7 +19,7 @@ static bool find_labels(int* program, const unsigned int length) {
 
     //replace all label usages with the resolved addr, (label, index) -> (val, value)
     for (i = 0; i < length; i++) {
-        if (program[i] == T_LABEL && (i + 2) >= length || program[i+2] != T_COLON) {
+        if (program[i] == T_LABEL && ((i + 2) >= length || program[i+2] != T_COLON)) {
             program[i] = T_VAL;
             program[i+1] = labels[program[i+1]];
         }
@@ -71,7 +70,7 @@ static bool compile_line(const uint32_t* line, uint32_t* instruction) {
                 else return false;
 
     //shared encoding method for all unary mathematical/logical operations
-    #define UNARY_OP  \
+    #define UNARY_OP \
                 if (length >= 4 && line[1] == T_SPACE && line[2] == T_REG && line[3] < 16) { /* op reg */ \
                     ENCODE_MODE(0b0000); /* mode */ \
                     *instruction |= line[3] << 0x10;  /* reg */  \
@@ -87,7 +86,7 @@ static bool compile_line(const uint32_t* line, uint32_t* instruction) {
                 else return false;
 
     //shared encoding method for all jump operations
-    #define JMP_OP  \
+    #define JMP_OP \
                 if (length >= 4 && line[1] == T_SPACE && line[2] == T_REG && line[3] < 16) { /* jump to addr in reg */ \
                     ENCODE_MODE(0b0000); /* mode */ \
                     *instruction |= line[3] << 0x10;  /* reg */  \
@@ -101,6 +100,16 @@ static bool compile_line(const uint32_t* line, uint32_t* instruction) {
                     *instruction |= line[3];          /* addr */ \
                 } \
                 else return false;
+    
+    //shared encoding method for in/out
+    #define IO_OP \
+                if (length >= 7 && line[1] == T_SPACE && line[2] == T_REG && line[3] < 16 && \
+                    line[4] == T_COMMA && line[5] == T_SPACE && line[6] == T_VAL && line[7] < 256) { \
+                    *instruction |= line[3] << 0x10; /* reg */ \
+                    *instruction |= line[7] << 0x8; /* port */ \
+                } \
+                else return false; \
+
 
     switch (line[0]) {
             case T_NOP:
@@ -363,25 +372,15 @@ static bool compile_line(const uint32_t* line, uint32_t* instruction) {
                 break;
             case T_IN:
                 ENCODE_OP(line[0]);
-                if (length >= 7 && line[1] == T_SPACE && line[2] == T_REG && line[3] < 16 &&
-                    line[4] == T_COMMA && line[5] == T_SPACE && line[6] == T_VAL && line[7] < 256) {
-                    *instruction |= line[3] << 0x10;
-                    *instruction |= line[7] << 0x8;
-                }
-                else return false;
+                IO_OP;
                 break;
             case T_OUT:
                 ENCODE_OP(line[0]);
-                if (length >= 7 && line[1] == T_SPACE && line[2] == T_REG && line[3] < 16 &&
-                    line[4] == T_COMMA && line[5] == T_SPACE && line[6] == T_VAL && line[7] < 256) {
-                    *instruction |= line[3] << 0x10;
-                    *instruction |= line[7] << 0x8;
-                }
-                else return false;
+                IO_OP;
                 break;
             case T_DW:
-                if (length == 3)
-                    *instruction = line[2]; //data value
+                if (length >= 4 && line[1] == T_SPACE && line[2] == T_VAL && line[3] <= 0xFFFF)
+                    *instruction = line[3]; //data value
                 break;
             case T_LABEL: //label will have already been found, skip
                 break;
