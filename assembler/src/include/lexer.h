@@ -2,7 +2,7 @@
 #define LEXER_H
 
 #define MAX_PROGRAM_LENGTH 1000
-#define MAX_LINE_LENGTH 10
+#define MAX_LINE_LENGTH 15
 
 /* all tokens */
 enum {

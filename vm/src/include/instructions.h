@@ -1,5 +1,5 @@
-#ifndef CPU_H
-#define CPU_H
+#ifndef INSTRUCTIONS_H
+#define INSTRUCTIONS_H
 
 #include <stdint.h>
 #include <stdbool.h>

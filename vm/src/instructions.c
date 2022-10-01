@@ -758,6 +758,7 @@ void run (char* diskfile) {
 
     registers[R_FLAGS] = FLAGS_INIT;
     registers[R_IP] = 0x0;
+
     while (!celeste.halted) {
         step();
     }

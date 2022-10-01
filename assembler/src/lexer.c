@@ -4,8 +4,8 @@
 #include <stdbool.h>
 #include <lexer.h>
 
-int tokenlist[MAX_PROGRAM_LENGTH];          //contains the tokenized program for the parser
-unsigned int token_index = 0; //points to the next open index for a token
+int tokenlist[MAX_PROGRAM_LENGTH]; //contains the tokenized program for the parser
+unsigned int token_index = 0;      //points to the next open index for a token
 
 /* map mnemonic to token */
 static bool keyword_map (const char* keyword) {
@@ -72,7 +72,15 @@ static bool keyword_map (const char* keyword) {
 }
 
 /* label tokenizing */
-static unsigned int label_count;
+static unsigned int label_count = 0;
+static char label_names[50][10];
+
+static bool label_found (const char *label) {
+    for (int i = 0; i < label_count; i++) {
+        if (strcmp(label, label_names[i]) == 0) return true;
+    }
+    return false;
+}
 
 /* tokenize the asm file */
 bool tokenize(const char* buffer) {
@@ -105,8 +113,15 @@ bool tokenize(const char* buffer) {
             tempbuffer[tempbuffer_index] = '\0';
             if (!keyword_map(tempbuffer)) {         //map to keyword
                 tokenlist[token_index++] = T_LABEL; //if not, must be a label
-                for (tempbuffer_index = 0; tempbuffer_index < strlen(tempbuffer); tempbuffer_index++) {
-                    tokenlist[token_index++] = tempbuffer[tempbuffer_index];
+                if (!label_found(tempbuffer)) {     //if label is new, assign it a number
+                    strcpy(label_names[label_count], tempbuffer);
+                    tokenlist[token_index++] = label_count;
+                    label_count++;
+                }
+                else { //if label is not new, find its number
+                    for (int i = 0; i < label_count; i++) {
+                        if (strcmp(tempbuffer, label_names[i]) == 0) tokenlist[token_index++] = i;
+                    }
                 }
             }
             index--; //correct index
