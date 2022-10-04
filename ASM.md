@@ -22,7 +22,7 @@ Write a comment with:
 `;<comment>`
 The assembler will ignore that text.
 
-Instructions that can be used can be found in **ISA.md**. Their mnemonics and arguments are the same as described in that document.
+Instructions that can be used can be found in **ISA.md**. Their mnemonics and arguments are the same as described in that document. Check the ./bin folder for some example programs.
 
 Currently limited to max 50 labels and max 1000 tokens, but feel free to modify to suit your needs.
 

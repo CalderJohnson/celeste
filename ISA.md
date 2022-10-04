@@ -123,7 +123,14 @@ Keyboard (Port 0x1, interrupt 0x1):
     Implementation pending
 
 Screen (Port 0x2, interrupt 0x2):
-    Implementation pending
+    To write a pixel:
+        Position to write to in ax and bx (x, y)
+        Color value of the pixel in port 0x2, in the format [00000000][r][g][b]
+        Call interrupt 0x2 with 0 in the dx register
+    To display to the buffer:
+        Call interrupt 0x2 with 1 in the dx register
+    To clear the buffer: 
+        Call interrupt 0x2 with 2 in the dx register
 
 Disk (Port 0x3, interrupt 0x3):
     To write to disk:

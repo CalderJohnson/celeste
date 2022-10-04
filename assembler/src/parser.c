@@ -420,5 +420,6 @@ bool compile(FILE* executable, const unsigned int length) {
         fwrite(&current_instruction, sizeof(uint32_t), 1, executable);
     }
 
+    free(program_lines);
     return true;
 }

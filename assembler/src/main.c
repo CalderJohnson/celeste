@@ -45,5 +45,7 @@ int main (int argc, char **argv) {
     else {
         printf("Lexer error\n");
     }
+    free(buffer);
+    free(executable_name);
     return 0;
 }

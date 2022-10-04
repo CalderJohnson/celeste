@@ -3,6 +3,7 @@
 #include <instructions.h>
 #include <interrupts.h>
 #include <disk.h>
+#include <screen.h>
 
 /* rotate left */
 #define ROL(n, d) (n << d) | (n >> (32 - d))
@@ -754,6 +755,7 @@ static void step () {
 /* start the machine */
 void run (char* diskfile) {
     if(!init_disk(diskfile)) return;
+    if(!init_screen()) return;
     load_program(); /* will be replaced by proper firmware */
 
     registers[R_FLAGS] = FLAGS_INIT;

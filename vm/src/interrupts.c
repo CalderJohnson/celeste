@@ -4,6 +4,7 @@
 #include <vm.h>
 #include <interrupts.h>
 #include <disk.h>
+#include <screen.h>
 
 /* TIMER callback */
 static void isr_timer () {
@@ -17,6 +18,24 @@ static void isr_keyboard () {
 
 /* write to display */
 static void isr_screen () {
+    uint8_t position_x = (registers[R_AX] & 0xFF);     //x position goes in ax
+    uint8_t position_y = (registers[R_BX] & 0xFF);     //y position goes in bx
+    uint8_t r = (memory[PORT_SCREEN] & 0xFF0000) >> 0x10; //red
+    uint8_t g = (memory[PORT_SCREEN] & 0xFF00)   >> 0x8;  //green
+    uint8_t b = (memory[PORT_SCREEN] & 0xFF);             //blue
+    uint8_t mode = registers[R_DX];
+    if (mode == 0) { //draw
+        draw(position_x, position_y, r, g, b);
+    }
+    else if (mode == 1) { //update
+        update();
+    }
+    else if (mode == 2) { //clear 
+        clear();
+    }
+    else {
+        call_trap(TRAP_IOERROR);
+    }
     return;
 }
 

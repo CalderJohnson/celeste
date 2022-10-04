@@ -4,4 +4,9 @@ A simple, custom 32 bit virtual machine with a dedicated assembler. A personal e
 
 __Building__
 
-You'll notice there are two main source folders, one for the assembler and one for the emulator. Change into one of them and run `make all` to build the executable which will reside in ./bin. Also in bin are example programs! 
+You'll notice there are two main source folders, one for the assembler and one for the emulator. Change into one of them and run `make all` to build the executable which will reside in ./bin. Also in bin are example programs!
+
+To build you will need:
+    - Gnumake or equivalent
+    - clang
+    - csfml
