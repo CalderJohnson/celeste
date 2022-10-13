@@ -5,21 +5,22 @@
 #include <interrupts.h>
 #include <disk.h>
 #include <screen.h>
+#include <clock.h>
 
-/* TIMER callback */
+/* timer interrupt */
 static void isr_timer () {
-    return;
+    memory[PORT_TIMER] = get_timer();
 }
 
-/* KEYBOARD callback */
+/* keyboard callback */
 static void isr_keyboard () {
     return;
 }
 
 /* write to display */
 static void isr_screen () {
-    uint8_t position_x = (registers[R_AX] & 0xFF);     //x position goes in ax
-    uint8_t position_y = (registers[R_BX] & 0xFF);     //y position goes in bx
+    uint8_t position_x = (registers[R_AX] & 0xFF);        //x position goes in ax
+    uint8_t position_y = (registers[R_BX] & 0xFF);        //y position goes in bx
     uint8_t r = (memory[PORT_SCREEN] & 0xFF0000) >> 0x10; //red
     uint8_t g = (memory[PORT_SCREEN] & 0xFF00)   >> 0x8;  //green
     uint8_t b = (memory[PORT_SCREEN] & 0xFF);             //blue
@@ -30,7 +31,7 @@ static void isr_screen () {
     else if (mode == 1) { //update
         update();
     }
-    else if (mode == 2) { //clear 
+    else if (mode == 2) { //clear
         clear();
     }
     else {
@@ -88,7 +89,7 @@ void call_interrupt (uint8_t intcode) {
             break;
         default:
             isr_stub();
-    } 
+    }
     registers[R_FLAGS] |= FL_INTERRUPT; //set interrupt flag
     return;
 }

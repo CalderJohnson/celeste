@@ -4,6 +4,7 @@
 #include <interrupts.h>
 #include <disk.h>
 #include <screen.h>
+#include <clock.h>
 
 /* rotate left */
 #define ROL(n, d) (n << d) | (n >> (32 - d))
@@ -756,6 +757,7 @@ static void step () {
 void run (char* diskfile) {
     if(!init_disk(diskfile)) return;
     if(!init_screen()) return;
+    init_clock();
     load_program(); /* will be replaced by proper firmware */
 
     registers[R_FLAGS] = FLAGS_INIT;
@@ -763,5 +765,6 @@ void run (char* diskfile) {
 
     while (!celeste.halted) {
         step();
+        while(!next_clock(CLOCK_SPEED)) {/* hold */}
     }
 }

@@ -64,7 +64,7 @@ static bool keyword_map (const char* keyword) {
     else if (strcmp(keyword, "r4")    == 0) { tokenlist[token_index++] = T_REG; tokenlist[token_index++] = 13; }
     else if (strcmp(keyword, "r5")    == 0) { tokenlist[token_index++] = T_REG; tokenlist[token_index++] = 14; }
     else if (strcmp(keyword, "r6")    == 0) { tokenlist[token_index++] = T_REG; tokenlist[token_index++] = 15; }
-    
+
     /* other */
     else if (strcmp(keyword, "dw")    == 0)  tokenlist[token_index++] = T_DW;
     else return false;
@@ -76,7 +76,7 @@ static unsigned int label_count = 0;
 static char label_names[50][10];
 
 static bool label_found (const char *label) {
-    for (int i = 0; i < label_count; i++) {
+    for (unsigned int i = 0; i < label_count; i++) {
         if (strcmp(label, label_names[i]) == 0) return true;
     }
     return false;
@@ -85,7 +85,7 @@ static bool label_found (const char *label) {
 /* tokenize the asm file */
 bool tokenize(const char* buffer) {
     char tempbuffer[10];
-    for (int index = 0; index < strlen(buffer); index++) {
+    for (unsigned int index = 0; index < strlen(buffer); index++) {
         if (buffer[index] == ';') { //comment
             while (index < strlen(buffer) && buffer[++index] != '\n') {/* iterate */}
             tokenlist[token_index++] = T_NL;
@@ -119,7 +119,7 @@ bool tokenize(const char* buffer) {
                     label_count++;
                 }
                 else { //if label is not new, find its number
-                    for (int i = 0; i < label_count; i++) {
+                    for (unsigned int i = 0; i < label_count; i++) {
                         if (strcmp(tempbuffer, label_names[i]) == 0) tokenlist[token_index++] = i;
                     }
                 }
@@ -133,7 +133,7 @@ bool tokenize(const char* buffer) {
                 tempbuffer[tempbuffer_index] = buffer[index++];
             }
             tempbuffer[tempbuffer_index] = '\0';
-            tokenlist[token_index++] = atoi(tempbuffer); 
+            tokenlist[token_index++] = atoi(tempbuffer);
             index--; //correct index
         }
         else return false;

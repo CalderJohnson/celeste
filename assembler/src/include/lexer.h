@@ -4,6 +4,8 @@
 #define MAX_PROGRAM_LENGTH 1000
 #define MAX_LINE_LENGTH 15
 
+#include <stdbool.h>
+
 /* all tokens */
 enum {
     /* operation tokens */
