@@ -6,7 +6,6 @@
 #include <screen.h>
 #include <clock.h>
 
-
 /* update flags that can be updated given the most recent output of the ALU (sign, zero, parity) */
 static void update_flags (const int32_t result) {
     if (result >> 0x1F) {
@@ -566,7 +565,7 @@ static void op_shr (const uint8_t spec, const uint32_t instruction) {
 static void op_rol (const uint8_t spec, const uint32_t instruction) {
     /* rotate left */
     #define ROL(n, d) (n << d) | (n >> (32 - d))
-    
+
     uint16_t data = instruction & 0xFFFF;
     uint8_t reg_1 = (instruction >> 0x10) & 0xF;
     uint8_t reg_2 = (instruction >> 0xC)  & 0xF;
