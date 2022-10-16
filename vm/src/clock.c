@@ -19,7 +19,7 @@ static inline void restart_clock() {
     sysclock = current_time();
 }
 
-/* initialize both timers */
+/* initialize processor clock */
 void init_clock () {
     base = current_time();
     sysclock = base;
