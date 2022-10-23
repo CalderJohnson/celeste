@@ -5,6 +5,7 @@
 #include <interrupts.h>
 #include <disk.h>
 #include <screen.h>
+#include <keyboard.h>
 #include <clock.h>
 
 /* timer interrupt */
@@ -14,7 +15,7 @@ static void isr_timer () {
 
 /* keyboard callback */
 static void isr_keyboard () {
-    return;
+    memory[PORT_KEYBOARD] = get_key();
 }
 
 /* write to display */

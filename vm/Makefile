@@ -1,6 +1,6 @@
 C_SOURCES = $(wildcard src/*.c)
 CC        = /usr/bin/clang
-CFLAGS    = -I ./src/include -Wall -Wextra -lcsfml-graphics
+CFLAGS    = -I ./src/include -Wall -Wextra -lcsfml-graphics -lcsfml-window
 DEBUGGER  = /usr/bin/gdb
 
 debug:
