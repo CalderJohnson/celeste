@@ -51,14 +51,14 @@ char* instruction_names[] = {
 /* emits a formatted error */
 void error (type t, int instruction, int line_num) {
     if (t == LEXER)
-        printf(RED "Lexer error on line %d\n", line_num);
+        printf(RED "Lexer error on line %d\n" RESET, line_num);
     else if (t == PARSER)
-        printf(RED "Parser error, for instruction %s on line %d\n", instruction_names[instruction], line_num);
+        printf(RED "Parser error, for instruction %s on line %d\n" RESET, instruction_names[instruction], line_num);
     return;
 }
 
 /* emits a formatted success message */
-void success(type t) {
+void success (type t) {
     if (t == LEXER)
         printf(GREEN "Successfully tokenized...\n" RESET);
     else if (t == PARSER)
