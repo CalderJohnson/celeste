@@ -3,6 +3,7 @@
 #include <string.h>
 #include <stdbool.h>
 #include <lexer.h>
+#include <error.h>
 
 int tokenlist[MAX_PROGRAM_LENGTH]; //contains the tokenized program for the parser
 unsigned int token_index = 0;      //points to the next open index for a token
@@ -41,7 +42,8 @@ static bool keyword_map (const char* keyword) {
     else if (strcmp(keyword, "or")    == 0)   tokenlist[token_index++] = T_OR;
     else if (strcmp(keyword, "xor")   == 0)   tokenlist[token_index++] = T_XOR;
     else if (strcmp(keyword, "not")   == 0)   tokenlist[token_index++] = T_NOT;
-    else if (strcmp(keyword, "shl")   == 0)   tokenlist[token_index++] = T_SHR;
+    else if (strcmp(keyword, "shl")   == 0)   tokenlist[token_index++] = T_SHL;
+    else if (strcmp(keyword, "shr")   == 0)   tokenlist[token_index++] = T_SHR;
     else if (strcmp(keyword, "rol")   == 0)   tokenlist[token_index++] = T_ROL;
     else if (strcmp(keyword, "ror")   == 0)   tokenlist[token_index++] = T_ROR;
     else if (strcmp(keyword, "in")    == 0)   tokenlist[token_index++] = T_IN;
@@ -84,11 +86,13 @@ static bool label_found (const char *label) {
 
 /* tokenize the asm file */
 bool tokenize(const char* buffer) {
+    unsigned int line_count = 1; //for error handling
     char tempbuffer[10];
     for (unsigned int index = 0; index < strlen(buffer); index++) {
         if (buffer[index] == ';') { //comment
             while (index < strlen(buffer) && buffer[++index] != '\n') {/* iterate */}
             tokenlist[token_index++] = T_NL;
+            line_count++;
         }
         else if (buffer[index] == ' ') { //space
             tokenlist[token_index++] = T_SPACE;
@@ -98,6 +102,7 @@ bool tokenize(const char* buffer) {
         }
         else if (buffer[index] == '\n') { //newline
             tokenlist[token_index++] = T_NL;
+            line_count++;
         }
         else if (buffer[index] == '*') { //dereference
             tokenlist[token_index++] = T_DEREF;
@@ -136,7 +141,10 @@ bool tokenize(const char* buffer) {
             tokenlist[token_index++] = atoi(tempbuffer);
             index--; //correct index
         }
-        else return false;
+        else {
+            error(LEXER, 0, line_count); //throw error, unknown characters
+            return false;
+        }
     }
     tokenlist[token_index++] = T_NL; //trailing newline so that the last line is known to the parser
     return true;

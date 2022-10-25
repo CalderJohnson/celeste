@@ -6,6 +6,7 @@
 #include <string.h>
 #include <lexer.h>
 #include <parser.h>
+#include <error.h>
 
 int main (int argc, char **argv) {
     if (argc != 2) {
@@ -34,9 +35,9 @@ int main (int argc, char **argv) {
     fclose(source);
 
     if (tokenize(buffer)) {
-        printf("Successfully tokenized...\n");
+        success(LEXER);
         if (compile(executable, token_index)) {
-            printf("Successfully compiled... \n");
+            success(PARSER);
         }
         else {
             printf("Parsing error\n");

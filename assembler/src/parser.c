@@ -4,6 +4,7 @@
 #include <stdbool.h>
 #include <string.h>
 #include <lexer.h>
+#include <error.h>
 
 /* label resolving */
 static unsigned int labels[50];
@@ -100,7 +101,7 @@ static bool compile_line(const uint32_t* line, uint32_t* instruction) {
                     *instruction |= line[3];          /* addr */ \
                 } \
                 else return false;
-    
+
     //shared encoding method for in/out
     #define IO_OP \
                 if (length >= 7 && line[1] == T_SPACE && line[2] == T_REG && line[3] < 16 && \
@@ -254,7 +255,7 @@ static bool compile_line(const uint32_t* line, uint32_t* instruction) {
                     ENCODE_MODE(0b0001); //mode
                     *instruction |= line[3] << 0x10;  //reg
                     *instruction |= line[8];          //addr
-                } 
+                }
                 else if (length >= 8 && line[1] == T_SPACE && line[2] == T_REG && line[3] < 16 &&
                     line[4] == T_COMMA && line[5] == T_SPACE && line[6] == T_VAL && line[7] <= 0xFFFF) { //reg to immv
                     ENCODE_MODE(0b0010); //mode
@@ -295,7 +296,7 @@ static bool compile_line(const uint32_t* line, uint32_t* instruction) {
                 ENCODE_OP(line[0]);
                 JMP_OP;
                 break;
-            case T_JGE:  
+            case T_JGE:
                 ENCODE_OP(line[0]);
                 JMP_OP;
                 break;
@@ -416,7 +417,10 @@ bool compile(FILE* executable, const unsigned int length) {
     /* compile lines one by one */
     uint32_t current_instruction;
     for (i = 0; i < line_count; i++) {
-        if(!compile_line(program_lines[i], &current_instruction)) return false;
+        if(!compile_line(program_lines[i], &current_instruction)){
+            error(PARSER, program_lines[i][0], i + 1); //throw error
+            return false;
+        }
         fwrite(&current_instruction, sizeof(uint32_t), 1, executable);
     }
 
