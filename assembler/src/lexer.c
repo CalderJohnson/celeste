@@ -112,7 +112,7 @@ bool tokenize(const char* buffer) {
         }
         else if (buffer[index] >= 97 && buffer[index] <= 122) { //letter (label/opcode/reg/dw)
             int tempbuffer_index;
-            for(tempbuffer_index = 0; buffer[index] >= 97 && buffer[index] <= 122; tempbuffer_index++) {
+            for(tempbuffer_index = 0; (buffer[index] >= 97 && buffer[index] <= 122) || (buffer[index] >= 48 && buffer[index] <= 57); tempbuffer_index++) {
                 tempbuffer[tempbuffer_index] = buffer[index++];
             }
             tempbuffer[tempbuffer_index] = '\0';

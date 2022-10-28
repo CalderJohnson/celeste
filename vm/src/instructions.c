@@ -761,6 +761,7 @@ void run (char* diskfile) {
     load_program(); /* will be replaced by proper firmware */
 
     registers[R_FLAGS] = FLAGS_INIT;
+    registers[R_SP] = 0xFFFF;
     registers[R_IP] = 0x0;
 
     while (!celeste.halted) {

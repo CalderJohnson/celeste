@@ -388,6 +388,8 @@ static bool compile_line(const uint32_t* line, uint32_t* instruction) {
             case T_NL: //empty line, skip
                 break;
     }
+    if(debug)
+        output_encoding(*instruction);
     return true;
 }
 

@@ -1,10 +1,14 @@
 #include <stdio.h>
 #include <string.h>
+#include <stdbool.h>
 #include <error.h>
 
-#define RED   "\033[31m" //error color
-#define GREEN "\033[32m" //success color
-#define RESET "\033[0m"
+#define RED    "\033[31m" //error color
+#define GREEN  "\033[32m" //success color
+#define YELLOW "\033[33m" //encoding color
+#define RESET  "\033[0m"
+
+bool debug = true;
 
 /* instruction names map */
 char* instruction_names[] = {
@@ -63,5 +67,27 @@ void success (type t) {
         printf(GREEN "Successfully tokenized...\n" RESET);
     else if (t == PARSER)
         printf(GREEN "Successfully compiled...\n" RESET);
+    return;
+}
+
+#define BYTE_PATTERN "%c%c%c%c%c%c%c%c "
+#define BYTE_TO_BINARY(byte)  \
+    (byte & 0x80 ? '1' : '0'), \
+    (byte & 0x40 ? '1' : '0'), \
+    (byte & 0x20 ? '1' : '0'), \
+    (byte & 0x10 ? '1' : '0'), \
+    (byte & 0x08 ? '1' : '0'), \
+    (byte & 0x04 ? '1' : '0'), \
+    (byte & 0x02 ? '1' : '0'), \
+    (byte & 0x01 ? '1' : '0')
+
+/* output a formatted encoding */
+void output_encoding(int instruction) {
+    printf(YELLOW "Emmiting: " BYTE_PATTERN BYTE_PATTERN BYTE_PATTERN BYTE_PATTERN "\n",
+        BYTE_TO_BINARY(instruction & 0xFF000000 >> 6),
+        BYTE_TO_BINARY(instruction & 0x00FF0000 >> 4),
+        BYTE_TO_BINARY(instruction & 0x0000FF00 >> 2),
+        BYTE_TO_BINARY(instruction & 0x000000FF >> 0)
+    );
     return;
 }
