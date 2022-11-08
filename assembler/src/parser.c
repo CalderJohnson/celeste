@@ -388,8 +388,6 @@ static bool compile_line(const uint32_t* line, uint32_t* instruction) {
             case T_NL: //empty line, skip
                 break;
     }
-    if(debug)
-        output_encoding(*instruction);
     return true;
 }
 
@@ -422,6 +420,9 @@ bool compile(FILE* executable, const unsigned int length) {
         if(!compile_line(program_lines[i], &current_instruction)){
             error(PARSER, program_lines[i][0], i + 1); //throw error
             return false;
+        }
+        if(debug) {
+            output_encoding(current_instruction);
         }
         fwrite(&current_instruction, sizeof(uint32_t), 1, executable);
     }

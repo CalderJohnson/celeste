@@ -83,11 +83,11 @@ void success (type t) {
 
 /* output a formatted encoding */
 void output_encoding(int instruction) {
-    printf(YELLOW "Emmiting: " BYTE_PATTERN BYTE_PATTERN BYTE_PATTERN BYTE_PATTERN "\n",
-        BYTE_TO_BINARY(instruction & 0xFF000000 >> 6),
-        BYTE_TO_BINARY(instruction & 0x00FF0000 >> 4),
-        BYTE_TO_BINARY(instruction & 0x0000FF00 >> 2),
-        BYTE_TO_BINARY(instruction & 0x000000FF >> 0)
+    printf(YELLOW "Emmiting: " BYTE_PATTERN BYTE_PATTERN BYTE_PATTERN BYTE_PATTERN "\n" RESET,
+        BYTE_TO_BINARY((instruction & 0xFF000000) >> 24),
+        BYTE_TO_BINARY((instruction & 0x00FF0000) >> 16),
+        BYTE_TO_BINARY((instruction & 0x0000FF00) >> 8),
+        BYTE_TO_BINARY((instruction & 0x000000FF) >> 0)
     );
     return;
 }
