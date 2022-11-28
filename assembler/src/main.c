@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include <string.h>
+#include <preprocessor.h>
 #include <lexer.h>
 #include <parser.h>
 #include <error.h>
@@ -30,9 +31,12 @@ int main (int argc, char **argv) {
     fseek(source, 0, SEEK_END);
     int length = ftell(source);
     fseek(source, 0, SEEK_SET);
-    char* buffer = (char *)calloc(length, sizeof(char));
-    fread(buffer, 1, length, source);
+    char* raw_buffer = (char *)calloc(length, sizeof(char));
+    fread(raw_buffer, 1, length, source);
     fclose(source);
+
+    char* buffer = preprocess(raw_buffer);
+    free(raw_buffer);
 
     if (tokenize(buffer)) {
         success(LEXER);
